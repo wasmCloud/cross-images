@@ -1,0 +1,45 @@
+FROM ubuntu:20.04
+
+# deps
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --assume-yes --no-install-recommends \
+    autoconf \
+    automake \
+    binutils \
+    ca-certificates \
+    clang \
+    cmake \
+    curl \
+    file \
+    g++ \
+    gcc \
+    git \
+    libc6-dev \
+    libgmp-dev \
+    libmpc-dev \
+    libmpfr-dev \
+    libssl-dev \
+    libtool \
+    libxml2-dev \
+    m4 \
+    make \
+    patch \
+    pkg-config \
+    xz-utils \
+    zlib1g-dev
+
+## osxcross
+RUN git clone https://github.com/tpoechtrager/osxcross
+WORKDIR /osxcross
+RUN cd tarballs && curl -LO https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz
+RUN UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
+ENV PATH="/osxcross/target/bin:${PATH}"
+
+# install rustup
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN rustup target add x86_64-apple-darwin
+ENV CARGO_TARGET_X86_64_APPLE_DARWIN_LINKER=x86_64-apple-darwin14-clang \
+    CARGO_TARGET_X86_64_APPLE_DARWIN_AR=x86_64-apple-darwin14-ar \
+    CC=o64-clang \
+    CCX=o64-clang++

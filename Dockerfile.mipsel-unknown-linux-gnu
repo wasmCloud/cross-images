@@ -1,0 +1,10 @@
+ARG VERSION
+FROM rustembedded/cross:mipsel-unknown-linux-gnu-$VERSION
+
+ENV OPENSSL_DIR=/usr/local/openssl
+RUN git clone https://github.com/openssl/openssl
+RUN cd openssl && git checkout OpenSSL_1_1_1h && \
+	mkdir -p $OPENSSL_DIR && \
+	./Configure linux-mips32 --prefix=$OPENSSL_DIR --openssldir=$OPENSSL_DIR shared && \
+	make CC=mipsel-linux-gnu-gcc && \
+	make install

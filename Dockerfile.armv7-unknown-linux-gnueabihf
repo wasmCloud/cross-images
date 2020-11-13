@@ -1,0 +1,8 @@
+ARG VERSION
+FROM rustembedded/cross:armv7-unknown-linux-gnueabihf-$VERSION
+
+RUN DEBIAN_FRONTEND=noninteractive dpkg --add-architecture armhf && \
+    apt-get update && \
+    apt-get install --assume-yes libssl-dev:armhf
+
+ENV PKG_CONFIG_PATH=/usr/lib/arm-linux-gnueabihf/pkgconfig
