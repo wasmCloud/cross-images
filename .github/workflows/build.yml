@@ -1,0 +1,24 @@
+name: BUILD
+on:
+  pull_request:
+    branches:
+      - main
+        
+jobs:
+  build_all:
+    name: Build all images
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: repo_checkout
+        uses: actions/checkout@v2
+      -
+        name: docker_login
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_PUSH_USER }}
+          password: ${{ secrets.DOCKERHUB_PUSH_PASSWORD }}
+      -
+        name: Build and push
+        id: docker_build
+        run: make build
