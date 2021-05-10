@@ -25,21 +25,22 @@ RUN apt-get update && \
     make \
     patch \
     pkg-config \
+    python \
     xz-utils \
     zlib1g-dev
 
 ## osxcross
 RUN git clone https://github.com/tpoechtrager/osxcross
 WORKDIR /osxcross
-RUN cd tarballs && curl -LO https://s3.dockerproject.org/darwin/v2/MacOSX10.10.sdk.tar.xz
-RUN UNATTENDED=yes OSX_VERSION_MIN=10.7 ./build.sh
+RUN cd tarballs && curl -LO https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX11.3.sdk.tar.xz
+RUN UNATTENDED=yes OSX_VERSION_MIN=11.0 ./build.sh
 ENV PATH="/osxcross/target/bin:${PATH}"
 
 # install rustup
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
-RUN rustup target add x86_64-apple-darwin
-ENV CARGO_TARGET_X86_64_APPLE_DARWIN_LINKER=x86_64-apple-darwin14-clang \
-    CARGO_TARGET_X86_64_APPLE_DARWIN_AR=x86_64-apple-darwin14-ar \
+RUN rustup target add aarch64-apple-darwin
+ENV CARGO_TARGET_AARCH64_APPLE_DARWIN_LINKER=aarch64-apple-darwin20.4-clang \
+    CARGO_TARGET_AARCH64_APPLE_DARWIN_AR=aarch64-apple-darwin20.4-ar \
     CC=o64-clang \
     CCX=o64-clang++
