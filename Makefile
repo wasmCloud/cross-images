@@ -7,7 +7,7 @@ IMAGE         := wasmcloud/cross
 
 .PHONY: all Dockerfile.*
 
-build: $(wildcard Dockerfile.*) ## Build/push all images
+build: $(wildcard Dockerfile.*) ## Build all images
 Dockerfile.*: ## Build specific image
 	@docker build . -f $@ --build-arg VERSION=$(CROSS_VERSION) \
 		-t $(IMAGE):$(@:Dockerfile.%=%)
