@@ -1,17 +1,18 @@
 .DEFAULT_GOAL:=help
 
 CROSS_VERSION := 0.2.1
-IMAGE         := criticalstack/cross
+IMAGE         := wasmcloud/cross
 
 ##@ Building
 
 .PHONY: all Dockerfile.*
 
-all: $(wildcard Dockerfile.*) ## Build/push all images
-
+build: $(wildcard Dockerfile.*) ## Build all images
 Dockerfile.*: ## Build specific image
 	@docker build . -f $@ --build-arg VERSION=$(CROSS_VERSION) \
 		-t $(IMAGE):$(@:Dockerfile.%=%)
+
+release: build ## Build/push all images
 	@docker push $(IMAGE):$(@:Dockerfile.%=%)
 
 ##@ Helpers

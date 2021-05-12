@@ -1,0 +1,18 @@
+name: BUILD
+on:
+  pull_request:
+    branches:
+      - main
+        
+jobs:
+  build_all:
+    name: Build all images
+    runs-on: ubuntu-latest
+    steps:
+      - 
+        name: repo_checkout
+        uses: actions/checkout@v2
+      -
+        name: Build
+        id: docker_build
+        run: make build
