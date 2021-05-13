@@ -2,7 +2,7 @@
 
 CROSS_VERSION := 0.2.1
 IMAGE         := wasmcloud/cross
-RELEASE				?= false
+RELEASE       ?= false
 
 ##@ Building
 
