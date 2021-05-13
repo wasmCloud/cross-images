@@ -2,18 +2,21 @@
 
 CROSS_VERSION := 0.2.1
 IMAGE         := wasmcloud/cross
+RELEASE				?= false
 
 ##@ Building
 
 .PHONY: all Dockerfile.*
 
-build: $(wildcard Dockerfile.*) ## Build all images
+build: $(wildcard Dockerfile.*) ## Build/push all images
+
 Dockerfile.*: ## Build specific image
 	@docker build . -f $@ --build-arg VERSION=$(CROSS_VERSION) \
-		-t $(IMAGE):$(@:Dockerfile.%=%)
+		-t $(IMAGE):$(@:build-Dockerfile.%=%)
+ifeq ($(RELEASE),true)
+		docker push $(IMAGE):$(@:Dockerfile.%=%)
+endif
 
-release: build ## Build/push all images
-	@docker push $(IMAGE):$(@:Dockerfile.%=%)
 
 ##@ Helpers
 
