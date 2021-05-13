@@ -12,7 +12,7 @@ build: $(wildcard Dockerfile.*) ## Build/push all images
 
 Dockerfile.*: ## Build specific image
 	@docker build . -f $@ --build-arg VERSION=$(CROSS_VERSION) \
-		-t $(IMAGE):$(@:build-Dockerfile.%=%)
+		-t $(IMAGE):$(@:Dockerfile.%=%)
 ifeq ($(RELEASE),true)
 		docker push $(IMAGE):$(@:Dockerfile.%=%)
 endif
